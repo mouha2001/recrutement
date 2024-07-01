@@ -14,13 +14,230 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-     <script>
+    <style>
+        body {
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Figtree', sans-serif;
+            background-color: #f3f4f6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .form-section {
+            display: none;
+            width: 100%;
+            padding: 2rem;
+            background-color: #ffffff;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1), 0 6px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .form-section.active {
+            display: block;
+        }
+
+        .tab-button {
+            background-color: #e5e7eb;
+            color: #1f2937;
+            padding: 0.75rem 2rem;
+            cursor: pointer;
+            font-weight: 600;
+            text-align: center;
+            border-radius: 0.375rem;
+            transition: background-color 0.3s, color 0.3s;
+            flex: 1;
+            margin-right: 0.5rem;
+        }
+
+        .tab-button:last-child {
+            margin-right: 0;
+        }
+
+        .tab-button.active {
+            background-color: #3b82f6;
+            color: #ffffff;
+        }
+
+        .section-header {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-field {
+            background-color: #f9fafb;
+            border: 1px solid #d1d5db;
+            color: #1f2937;
+            padding: 0.75rem 1rem;
+            border-radius: 0.375rem;
+            width: 100%;
+            transition: border-color 0.3s;
+        }
+
+        .input-field:focus {
+            background-color: #ffffff;
+            border-color: #3b82f6;
+            outline: none;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #6b7280;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-button {
+            background-color: #3b82f6;
+            color: #ffffff;
+            padding: 0.75rem 2rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            border: none;
+        }
+
+        .form-button:hover {
+            background-color: #2563eb;
+        }
+
+        .nav-container {
+            width: 100%;
+            background-color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo img {
+            width: 150px;
+        }
+
+        .nav-profile {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .nav-profile svg {
+            margin-right: 0.5rem;
+        }
+
+        .nav-profile:hover .profile-menu {
+            display: block;
+        }
+
+        .profile-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background-color: #ffffff;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .profile-menu a,
+        .profile-menu button {
+            display: block;
+            padding: 0.75rem 1.5rem;
+            color: #1f2937;
+            text-align: left;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            width: 100%;
+            border: none;
+            background: none;
+            cursor: pointer;
+        }
+
+        .profile-menu a:hover,
+        .profile-menu button:hover {
+            background-color: #f3f4f6;
+        }
+
+        .flex-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        hr {
+            border: none;
+            border-top: 4px solid #d1d5db;
+            margin: 2rem 0;
+        }
+
+        .footer {
+            width: 100%;
+            background-color: #ffffff;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            bottom: 0;
+            left: 0;
+        }
+
+        .footer p {
+            margin: 0;
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .error-message {
+            color: #dc2626;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+
+        .center-logo {
+            display: flex;
+            justify-content: center;
+            margin: 0.5rem 0;
+        }
+
+        .center-logo img {
+            width: 300px;
+        }
+    </style>
+
+    <script>
         document.addEventListener("DOMContentLoaded", function() {
             document.getElementById("chargement").style.display = "none";
+            showSection('experience');
         });
 
-        function closeAlert() {
-            document.getElementById("success-alert").style.display = "none";
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.form-section');
+            sections.forEach(section => section.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+
+            const tabButtons = document.querySelectorAll('.tab-button');
+            tabButtons.forEach(button => button.classList.remove('active'));
+            document.getElementById('tab-' + sectionId).classList.add('active');
         }
 
         function addDiplome() {
@@ -28,11 +245,11 @@
             const diplomeIndex = diplomeContainer.children.length;
 
             const newDiplome = document.createElement('div');
-            newDiplome.classList.add('mb-16');
-            newDiplome.innerHTML = `
-                <div class="mb-6">
-                    <label for="nomdiplome_${diplomeIndex}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nom du diplôme</label>
-                    <select id="nomdiplome_${diplomeIndex}" name="nomdiplome[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+            newDiplome.classList.add('mb-6');
+            newDiplome.innerHTML =
+                `<div class="mb-6">
+                    <label for="nomdiplome_${diplomeIndex}" class="form-label">Nom du diplôme</label>
+                    <select id="nomdiplome_${diplomeIndex}" name="nomdiplome[]" class="input-field" required>
                         <option value="">Sélectionner un diplôme</option>
                         <option value="Doctoratdetat">Doctorat d'état</option>
                         <option value="Doctoratunique">Doctorat Unique</option>
@@ -42,217 +259,226 @@
                     </select>
                 </div>
                 <div class="mb-6">
-                    <label for="fichediplome_${diplomeIndex}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Attestation</label>
-                    <input type="file" name="fichediplome[]" id="fichediplome_${diplomeIndex}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" accept="application/pdf" required>
-                </div>
-            `;
+                    <label for="fichediplome_${diplomeIndex}" class="form-label">Attestation</label>
+                    <input type="file" name="fichediplome[]" id="fichediplome_${diplomeIndex}" class="input-field" accept="application/pdf" required>
+                </div>`;
             diplomeContainer.appendChild(newDiplome);
+        }
+
+        function handleSubmit(event) {
+            event.preventDefault();
+            const isValid = validateSections();
+            if (isValid) {
+                alert('Votre dossier a été bien reçu.');
+                event.target.submit();
+            } else {
+                const firstInvalidSection = document.querySelector('.form-section.invalid');
+                if (firstInvalidSection) {
+                    const sectionId = firstInvalidSection.getAttribute('id');
+                    showSection(sectionId);
+                    alert('Veuillez remplir tous les champs dans la section ' + sectionId + ' avant de soumettre.');
+                }
+            }
+        }
+
+        function validateSections() {
+            let isValid = true;
+            const sections = document.querySelectorAll('.form-section');
+            sections.forEach(section => {
+                const inputs = section.querySelectorAll('input, select');
+                let sectionValid = true;
+                inputs.forEach(input => {
+                    if (!input.value) {
+                        sectionValid = false;
+                    }
+                });
+                if (!sectionValid) {
+                    section.classList.add('invalid');
+                    isValid = false;
+                } else {
+                    section.classList.remove('invalid');
+                }
+            });
+            return isValid;
         }
     </script>
 </head>
-<body class="font-sans antialiased flex flex-col items-center min-h-screen bg-gray-100 dark:bg-gray-900">
-    <nav class="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 left-0 h-20 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center px-4">
-        <a href="#" class="flex items-center space-x-3 rtl:space-x-reverse">
-            <img src="{{ asset('images/nouveau-logo-uadb.png') }}" alt="Logo UADB" width="300" height="auto">
-        </a>
-         <ul class="flex items-center h-20 space-x-3">
-            <li class="relative group">
-                <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group">
+<body>
+    <div class="nav-container">
+        <nav>
+            <div class="nav-logo">
+                <img src="{{ asset('images/nouveau-logo-uadb.png') }}" alt="Logo UADB">
+            </div>
+            <div class="nav-profile">
+                <a href="#" class="flex items-center">
                     <svg class="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                         <path stroke="gray" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0 0a8.949 8.949 0 0 0 4.951-1.488A3.987 3.987 0 0 0 13 16h-2a3.987 3.987 0 0 0-3.951 3.512A8.948 8.948 0 0 0 12 21Zm3-11a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                     </svg>
-                    <span class="flex-1 ms-3 whitespace-nowrap">{{ Auth::user()->nom }}</span>
+                    <span class="ml-2">{{ Auth::user()->nom }}</span>
                 </a>
-                <!-- Dropdown menu -->
-                <div class="absolute right-0 hidden w-48 py-2 mt-2 bg-white rounded-lg shadow-xl group-hover:block">
-                    <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Modifier Profil</a>
-                    <form method="POST" action="{{ route('logout') }}" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">
+                <div class="profile-menu">
+                    <a href="{{ route('profile.edit') }}">Modifier Profil</a>
+                    <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit">Déconnecter</button>
                     </form>
                 </div>
-            </li>
-        </ul>
-    </nav>
+            </div>
+        </nav>
+    </div>
+    <br>
 
+    <div class="center-logo">
+        <img src="{{ asset('img/logo.png') }}" alt="Logo">
+    </div>
 
-            <form action="{{ route('postulerper2') }}" method="POST" enctype="multipart/form-data">
+    <div class="container">
+        <div class="flex-row">
+            <button id="tab-experience" class="tab-button active" onclick="showSection('experience')">Expérience</button>
+            <button id="tab-niveau" class="tab-button" onclick="showSection('niveau')">Niveau</button>
+            <button id="tab-diplome" class="tab-button" onclick="showSection('diplome')">Diplôme</button>
+        </div>
+
+        @if (session('error'))
+            <div class="error-message">
+                {{ session('error') }}
+            </div>
+        @endif
+
+        @if (session('success'))
+            <div class="success-message">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        <form method="POST" action="{{ route('postulerper2') }}" enctype="multipart/form-data" class="w-full" onsubmit="handleSubmit(event)">
             @csrf
-@method('post')
 
-    <input type="hidden" name="postuler_id" value="{{ $idpost }}">
-
-    {{-- <div class="flex flex-col items-center w-full mt-24 px-2 space-y-8">
-        <div class="w-full max-w-7xl">
-            <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
-
+            <!-- Experience Section -->
+            <div id="experience" class="form-section active">
+                <div class="section-content">
+                    <h1 class="section-header">Enseignement à l'UADB</h1>
                     <div class="mb-6">
-                        <label for="intituler" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">intituler</label>
-                        <select id="intituler" name="intituler" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            @foreach($postuler as $postuler)
-                                <option value="{{ $postuler->intituler }}" name="{{ $postuler->intituler }}">{{ $postuler->intituler }}</option>
-                            @endforeach
+                        <label for="nombreanneeuadb" class="form-label">Nombre d'années</label>
+                        <input type="number" id="nombreanneeuadb" name="nombreanneeuadb" class="input-field" placeholder="Nombre d'années enseignées à l'UADB">
+                    </div>
+                    <div class="mb-6">
+                        <label for="attestationuadb" class="form-label">Attestation</label>
+                        <input type="file" name="attestationuadb" id="attestationuadb" class="input-field" accept="application/pdf">
+                    </div>
+                </div>
+                <hr>
+                <div class="section-content">
+                    <h1 class="section-header">Expériences Pédagogiques</h1>
+                    <div class="mb-6">
+                        <label for="nombreanneepedagogiques" class="form-label">Nombre d'années</label>
+                        <input type="number" id="nombreanneepedagogiques" name="nombreanneepedagogiques" class="input-field" placeholder="Nombre d'années d'expérience pédagogique">
+                    </div>
+                    <div class="mb-6">
+                        <label for="attestationpedagogique" class="form-label">Attestation</label>
+                        <input type="file" name="attestationpedagogique" id="attestationpedagogique" class="input-field" accept="application/pdf">
+                    </div>
+                </div>
+                <hr>
+                <div class="section-content">
+                    <h1 class="section-header">Expériences Professionnelles</h1>
+                    <div class="mb-6">
+                        <label for="nombreanneeprofessionnel" class="form-label">Nombre d'années</label>
+                        <input type="number" id="nombreanneeprofessionnel" name="nombreanneeprofessionnel" class="input-field" placeholder="Nombre d'années d'expérience professionnelle">
+                    </div>
+                    <div class="mb-6">
+                        <label for="attestationprofessionnel" class="form-label">Attestation</label>
+                        <input type="file" name="attestationprofessionnel" id="attestationprofessionnel" class="input-field" accept="application/pdf">
+                    </div>
+                </div>
+
+                <div class="flex justify-end mt-8">
+                    <button type="button" class="form-button" onclick="showSection('niveau')">Suivant</button>
+                </div>
+            </div>
+
+            <!-- Niveau Section -->
+            <div id="niveau" class="form-section">
+                <div class="section-content">
+                    <h1 class="section-header">GRADE</h1>
+                    <div class="mb-16">
+                        <label for="typegrade" class="form-label">Grade</label>
+                        <select id="typegrade" name="typegrade" class="input-field">
+                            <option value="">Sélectionner votre grade</option>
+                            <option value="professeurtitulaire">Professeur titulaire</option>
+                            <option value="Maitredeconference">Maître de conférence</option>
+                            <option value="MaitreAssistant">Maître Assistant</option>
+                            <option value="Assistant">Assistant</option>
+                            <option value="Debutant">Débutant</option>
                         </select>
                     </div>
-
-            </div>
-        </div> --}}
-                 {{-- Enseignement a l'uadb --}}
-
-    <div class="flex flex-wrap justify-between items-start w-full max-w-7xl mt-24 px-2 space-x-4">
-        <div class="flex-1 bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 max-w-lg">
-            <h1 class="text-2xl font-bold mb-4">Enseignement à l'UADB</h1>
-                <div class="mb-6">
-                    <label for="nombreanneeuadb" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre d'années</label>
-                    <input type="number" id="nombreanneeuadb" name="nombreanneeuadb" value="nombreanneeuadb" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nombre d'années enseigne a l'uadb" >
-                </div>
-                <div class="mb-6">
-                    <label for="attestationuadb" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Attestation</label>
-                    <input type="file" name="attestationuadb" id="attestationuadb" value="attestationuadb" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" accept="application/pdf" >
-                </div>
-
-        </div>
-                        {{-- Experience pedgogique --}}
-        <div class="flex-1 bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 max-w-lg">
-            <h1 class="text-2xl font-bold mb-4">Experiences Pédagogique</h1>
-
-                <div class="mb-6">
-                    <label for="nombreanneepedagogiques" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre d'années</label>
-                    <input type="number" id="nombreanneepedagogiques" name="nombreanneepedagogiques" value="nombreanneepedagogiques" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nombre d'années l'experience pedagogique" >
-                </div>
-                <div class="mb-6">
-                    <label for="attestationpedagogique" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">attestationpedagogique</label>
-                    <input type="file" name="attestationpedagogique" id="attestationpedagogique" value="attestationpedagogique" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" accept="application/pdf" >
-                </div>
-
-        </div>
-                       {{-- Experience proffessionnel --}}
-        <div class="flex-1 bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 max-w-lg">
-            <h1 class="text-2xl font-bold mb-4">Expériences Professionnelles</h1>
-
-                <div class="mb-6">
-                    <label for="nombreanneeprofessionnel" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre d'années</label>
-                    <input type="number" id="nombreanneeprofessionnel" name="nombreanneeprofessionnel" value="nombreanneeprofessionnel" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nombre d'années experience professionnel">
-                </div>
-                <div class="mb-6">
-                    <label for="attestationprofessionnel" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">attestationprofessionnel</label>
-                    <input type="file" name="attestationprofessionnel" id="attestationprofessionnel" value="attestationprofessionnel" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" accept="application/pdf">
-                </div>
-
-        </div>
-    </div>
-
-                        {{-- Grade --}}
-                        <div class="flex flex-wrap justify-between items-start w-full max-w-7xl mt-24 px-2 space-x-4">
-         <div class="flex-1 bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 max-w-lg">
-            <h1 class="text-2xl font-bold mb-4">GRADE</h1>
-
-                <div class="mb-16">
-                   <label for="typegrade" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">grade</label>
-                        <select id="typegrade" name="typegrade" value="typegrade" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-
-                                <option value="">Selectionner votre grade</option>
-                                <option value="professeurtitulaire">Professeur titulaire</option>
-                                <option value="Maitredeconference">Maitre de conference</option>
-                                <option value="MaitreAssistant">Maitre Assistant</option>
-                                <option value="Assistant">Assistant</option>
-                                <option value="Debutant">Debutant</option>
-                        </select>
-                </div>
-
-                <div class="mb-16">
-                    <label for="attestationgrade" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">attestation</label>
-                    <input type="file" name="attestationgrade" id="attestationgrade" value="attestationgrade" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" accept="application/pdf">
-                </div>
-
-        </div>
-
-                          {{-- adequation --}}
-         <div class="flex-1 bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 max-w-lg">
-            <h1 class="text-2xl font-bold mb-4">Adequation</h1>
-
-                <div class="mb-16">
-                   <label for="degreadequation" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Adequation</label>
-                        <select id="degreadequation" name="degreadequation" name="degreadequation" value="degreadequation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-
-                                <option value="">Selectionner la degre dadequation adequation</option>
-                                <option value="enseignement">Enseignement</option>
-                                <option value="enseignement">Recherche</option>
-                                <option value="lesdeux">Enseignement et Recherche</option>
-                        </select>
-                </div>
-                <div class="mb-16">
-                    <label for="actederecherche" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Attestation</label>
-                    <input type="file" name="actederecherche" id="actederecherche" value="actederecherche" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" accept="application/pdf">
-                </div>
-
-         </div>
-
-  {{-- Publications --}}
-        <div class="flex-1 bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 max-w-lg">
-            <h1 class="text-2xl font-bold mb-4">Publications</h1>
-
-                <div class="mb-6">
-                   <label for="typepublication" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">publication</label>
-                        <select id="typepublication" name="typepublication" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-
-                                <option value="">Type de publication</option>
-                                <option value="abstract">Dans des revues indexes</option>
-                                <option value="comitedelecture">Dans des revues avec committes de lecture</option>
-                                <option value="conferenceinternational">Conference International</option>
-                                <option value="conferencenational">Conference National</option>
-                        </select>
-                </div>
-                <div class="mb-6">
-                    <label for="nombrearticleabstract" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre d'articles</label>
-                    <input type="number" id="nombrearticleabstract" name="nombrearticleabstract" value="nombrearticleabstract" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nombre d'articles" >
-                </div>
-                <div class="mb-3">
-                    <label for="actedepublication" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Attestation</label>
-                    <input type="file" name="actedepublication" id="actedepublication" value="actedepublication" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" accept="application/pdf" >
-                </div>
-
-        </div>
-
-
-         {{-- diplome --}}
-
-        <!-- Section Diplômes -->
-        <div class="flex-1 bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 max-w-lg">
-            <h1 class="text-2xl font-bold mb-4">Diplômes</h1>
-            <div class="mb-16">
-                <label for="nomdiplome" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nom du diplôme</label>
-                <select id="nomdiplome" name="nomdiplome" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
-                    <option value="">Sélectionner un diplôme</option>
-                    <option value="Doctoratdetat">Doctorat d'état</option>
-                    <option value="Doctoratunique">Doctorat Unique</option>
-                    <option value="phd">PhD</option>
-                    <option value="doctoratcycle3">Doctorat 3ème cycle</option>
-                    <option value="masterII">Master II</option>
-                </select>
-            </div>
-            <div class="mb-16">
-                <label for="fichediplome" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Attestation</label>
-                <input type="file" name="fichediplome" id="fichediplome" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" accept="application/pdf" required>
-            </div>
-           <button type="button" onclick="addDiplome()" class="text-blue-700 hover:text-blue-800 focus:outline-none">
-                Ajouter un autre diplôme
-            </button>
-        </div>
-
-    </div>
-      @if (session('success'))
-                    <div id="success-alert" class="bg-white-100 border border-white-400 text-black-700 px-8 py-7 rounded relative text-center" role="alert">
-                        <strong class="font-bold">Succès!</strong>
-                        <span class="block sm:inline">{{ session('success') }}</span>
-                        <button class="alert-button" onclick="closeAlert()">OK</button>
+                    <div class="mb-16">
+                        <label for="attestationgrade" class="form-label">Attestation</label>
+                        <input type="file" name="attestationgrade" id="attestationgrade" class="input-field" accept="application/pdf">
                     </div>
-                @endif
+                </div>
+                <hr>
+                <div class="section-content">
+                    <h1 class="section-header">Publications</h1>
+                    <div class="mb-6">
+                        <label for="typepublication" class="form-label">Publication</label>
+                        <select id="typepublication" name="typepublication" class="input-field">
+                            <option value="">Type de publication</option>
+                            <option value="abstract">Dans des revues indexées</option>
+                            <option value="comitedelecture">Dans des revues avec comité de lecture</option>
+                            <option value="conferenceinternational">Conférence Internationale</option>
+                            <option value="conferencenational">Conférence Nationale</option>
+                        </select>
+                    </div>
+                    <div class="mb-6">
+                        <label for="nombrearticleabstract" class="form-label">Nombre d'articles</label>
+                        <input type="number" id="nombrearticleabstract" name="nombrearticleabstract" class="input-field" placeholder="Nombre d'articles">
+                    </div>
+                    <div class="mb-6">
+                        <label for="actedepublication" class="form-label">Attestation</label>
+                        <input type="file" name="actedepublication" id="actedepublication" class="input-field" accept="application/pdf">
+                    </div>
+                </div>
+                <hr>
+                <div class="section-content">
+                    <h1 class="section-header">Adéquation</h1>
+                    <div class="mb-16">
+                        <label for="degreadequation" class="form-label">Adéquation</label>
+                        <select id="degreadequation" name="degreadequation" class="input-field">
+                            <option value="">Sélectionner le degré d'adéquation</option>
+                            <option value="enseignement">Enseignement</option>
+                            <option value="recherche">Recherche</option>
+                            <option value="lesdeux">Enseignement et Recherche</option>
+                        </select>
+                    </div>
+                    <div class="mb-16">
+                        <label for="actederecherche" class="form-label">Attestation</label>
+                        <input type="file" name="actederecherche" id="actederecherche" class="input-field" accept="application/pdf">
+                    </div>
+                </div>
+                <div class="flex justify-between mt-8">
+                    <button type="button" class="form-button bg-gray-600 hover:bg-gray-700" onclick="showSection('experience')">Précédent</button>
+                    <button type="button" class="form-button" onclick="showSection('diplome')">Suivant</button>
+                </div>
+            </div>
 
-    <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-        Postuler
-    </button>
-</form>
+            <!-- Diplôme Section -->
+            <div id="diplome" class="form-section">
+                <div class="section-content">
+                    <h2 class="section-header">Diplôme</h2>
+                    <div id="diplome-container" class="mb-6"></div>
+                    <button type="button" onclick="addDiplome()" class="form-button bg-green-600 hover:bg-green-700 mb-4">Ajouter un diplôme</button>
+                </div>
+                <div class="flex justify-between mt-8">
+                    <button type="button" class="form-button bg-gray-600 hover:bg-gray-700" onclick="showSection('niveau')">Précédent</button>
+                    <button type="submit" class="form-button">Soumettre</button>
+                </div>
+            </div>
+        </form>
+    </div>
 
+    <div class="footer">
+        <p>Site créé par Mouhamed Sene et Alioune Badara Gueye</p>
+    </div>
 </body>
 </html>

@@ -24,209 +24,124 @@ use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 use App\Models\User;
 
-
 class PostulerperController extends Controller
 {
-    // ajout du profil
     public function create()
     {
+        $user = Auth::user();
+        $hasAlreadyApplied = Postuleruser::where('user_id', $user->id)->exists();
+
+        if ($hasAlreadyApplied) {
+            return redirect()->route('postulerper')->with('error', 'Vous avez déjà postulé.');
+        }
+
         return view('postulerper1');
     }
 
     public function store(Request $request): RedirectResponse
-{
+    {
+        $user = Auth::user();
 
-    $request->validate([
-        // enseignement uadb
-        'nombreanneeuadb' => 'nullable|integer',
-        'attestationuadb'=>'nullable|file|mimes:pdf|max:2048',
-        // enseignement pedagogique
-        'nombreanneepedagogiques' => 'nullable|integer',
-        'attestationpedagogique'=>'nullable|file|mimes:pdf|max:2048',
-        // enseignement professionnel
-        'nombreanneeprofessionnel' => 'nullable|integer',
-        'attestationprofessionnel'=>'nullable|file|mimes:pdf|max:2048',
-         // grade
-         'typegrade' =>'nullable|string|in:professeurtitulaire,Maitredeconference,MaitreAssistant,Assistant,Debutant',
-         'attestationgrade'=>'nullable|file|mimes:pdf|max:2048',
-          // adequation
-         'degreadequation' => 'nullable|string|in:enseignement,enseignement','lesdeux',
-         'actederecherche' => 'nullable|file|mimes:pdf|max:2048',
-         // publication
-        'typepublication'=>'nullable|string|in:abstract,comitedelecture,conferenceinternational,conferencenational',
-        'nombrearticleabstract'=>'nullable|integer',
-        'actedepublication'=>'nullable|file|mimes:pdf|max:2048',
-        // diplome
-         'nomdiplome' => 'required|string|in:Doctoratdetat,Doctoratunique,phd,doctoratcycle3,masterII',
-         'fichediplome'=>'required|file|mimes:pdf|max:2048',
+        $hasAlreadyApplied = Postuleruser::where('user_id', $user->id)->exists();
 
+        if ($hasAlreadyApplied) {
+            return redirect()->route('postulerper')->with('error', 'Vous avez déjà postulé.');
+        }
 
+        $request->validate([
+            'nombreanneeuadb' => 'nullable|integer',
+            'attestationuadb' => 'nullable|file|mimes:pdf|max:2048',
+            'nombreanneepedagogiques' => 'nullable|integer',
+            'attestationpedagogique' => 'nullable|file|mimes:pdf|max:2048',
+            'nombreanneeprofessionnel' => 'nullable|integer',
+            'attestationprofessionnel' => 'nullable|file|mimes:pdf|max:2048',
+            'typegrade' => 'nullable|string|in:professeurtitulaire,Maitredeconference,MaitreAssistant,Assistant,Debutant',
+            'attestationgrade' => 'nullable|file|mimes:pdf|max:2048',
+            'degreadequation' => 'nullable|string|in:enseignement,recherche,lesdeux',
+            'actederecherche' => 'nullable|file|mimes:pdf|max:2048',
+            'typepublication' => 'nullable|string|in:abstract,comitedelecture,conferenceinternational,conferencenational',
+            'nombrearticleabstract' => 'nullable|integer',
+            'actedepublication' => 'nullable|file|mimes:pdf|max:2048',
+            'nomdiplome' => 'required|string|in:Doctoratdetat,Doctoratunique,phd,doctoratcycle3,masterII',
+            'fichediplome' => 'required|file|mimes:pdf|max:2048',
+        ]);
 
-    ]);
-    //  dd($request);
-   $user= Auth::user();
+        // Save all the data...
+        $enseignementuadb = new enseignementuadb();
+        $enseignementuadb->nombreanneeuadb = $request->nombreanneeuadb;
+        $enseignementuadb->iduser = $user->id;
+        if ($request->hasFile('attestationuadb')) {
+            $fichierPath = $request->file('attestationuadb')->store('pdfs', 'public');
+            $enseignementuadb->attestationuadb = $fichierPath;
+        }
+        $enseignementuadb->save();
 
+        $experiencepedagogique = new experiencepedagogique();
+        $experiencepedagogique->nombreanneepedagogiques = $request->nombreanneepedagogiques;
+        $experiencepedagogique->iduser = $user->id;
+        if ($request->hasFile('attestationpedagogique')) {
+            $fichierPath = $request->file('attestationpedagogique')->store('pdfs', 'public');
+            $experiencepedagogique->attestationpedagogique = $fichierPath;
+        }
+        $experiencepedagogique->save();
 
+        $experienceprofessionel = new experienceprofessionel();
+        $experienceprofessionel->nombreanneeprofessionnel = $request->nombreanneeprofessionnel;
+        $experienceprofessionel->iduser = $user->id;
+        if ($request->hasFile('attestationprofessionnel')) {
+            $fichierPath = $request->file('attestationprofessionnel')->store('pdfs', 'public');
+            $experienceprofessionel->attestationprofessionnel = $fichierPath;
+        }
+        $experienceprofessionel->save();
 
+        $grade = new grade();
+        $grade->typegrade = $request->typegrade;
+        $grade->iduser = $user->id;
+        if ($request->hasFile('attestationgrade')) {
+            $fichierPath = $request->file('attestationgrade')->store('pdfs', 'public');
+            $grade->attestationgrade = $fichierPath;
+        }
+        $grade->save();
 
-//    $post = new Post();
-//    $post->intituler = $postuler->intituler;
-//    $post->iduser = $user->id;
-//    $post->save();
- // enseignement uadb
-    $enseignementuadb=new enseignementuadb();
-    $enseignementuadb->nombreanneeuadb =$request->nombreanneeuadb;
-    $enseignementuadb->iduser=$user->id;
+        $adequation = new adequation();
+        $adequation->degreadequation = $request->degreadequation;
+        $adequation->iduser = $user->id;
+        if ($request->hasFile('actederecherche')) {
+            $fichierPath = $request->file('actederecherche')->store('pdfs', 'public');
+            $adequation->actederecherche = $fichierPath;
+        }
+        $adequation->save();
 
-    if ($request->hasFile('attestationuadb')) {
-        // Stocker le fichier dans le répertoire 'public/pdfs' et obtenir le chemin
-        $fichierPath = $request->file('attestationuadb')->store('pdfs', 'public');
-        // Enregistrer le chemin du fichier dans la base de données
-        $enseignementuadb->attestationuadb = $fichierPath;
+        $publication = new publication();
+        $publication->typepublication = $request->typepublication;
+        $publication->nombrearticleabstract = $request->nombrearticleabstract;
+        $publication->iduser = $user->id;
+        if ($request->hasFile('actedepublication')) {
+            $fichierPath = $request->file('actedepublication')->store('pdfs', 'public');
+            $publication->actedepublication = $fichierPath;
+        }
+        $publication->save();
+
+        $diplome = new diplome();
+        $diplome->nomdiplome = $request->nomdiplome;
+        $diplome->iduser = $user->id;
+        if ($request->hasFile('fichediplome')) {
+            $fichierPath = $request->file('fichediplome')->store('pdfs', 'public');
+            $diplome->fichediplome = $fichierPath;
+        }
+        $diplome->save();
+
+        $postuleruser = new Postuleruser();
+        $postuleruser->user_id = $user->id;
+        $postuleruser->postuler_id = $request->postuler_id;
+        $postuleruser->enseignement_id = $enseignementuadb->id;
+        $postuleruser->experiencepedagogique_id = $experiencepedagogique->id;
+        $postuleruser->experienceprofessionnel_id = $experienceprofessionel->id;
+        $postuleruser->grade_id = $grade->id;
+        $postuleruser->adequation_id = $adequation->id;
+        $postuleruser->diplome_id = $diplome->id;
+        $postuleruser->save();
+
+        return redirect()->route('postulerper')->with('success', 'Enregistrement validé!');
     }
-//sauvegarde
-    $enseignementuadb->save();
-
-    // enseignement pedagogique
-    $experiencepedagogique = new experiencepedagogique();
-    $experiencepedagogique->nombreanneepedagogiques= $request->nombreanneepedagogiques;
-    $experiencepedagogique->iduser=$user->id;
-
-    if ($request->hasFile('attestationpedagogique')) {
-        // Stocker le fichier dans le répertoire 'public/pdfs' et obtenir le chemin
-        $fichierPath = $request->file('attestationpedagogique')->store('pdfs', 'public');
-        // Enregistrer le chemin du fichier dans la base de données
-        $enseignementuadb->attestationpedagogique = $fichierPath;
-    }
-
-    $experiencepedagogique->save();
-
-     // experiences professionnel
-     $experienceprofessionel=new experienceprofessionel();
-     $experienceprofessionel->nombreanneeprofessionnel= $request->nombreanneeprofessionnel;
-     $experienceprofessionel->iduser=$user->id;
-     if ($request->hasFile('attestationprofessionnel')) {
-         // Stocker le fichier dans le répertoire 'public/pdfs' et obtenir le chemin
-         $fichierPath = $request->file('attestationprofessionnel')->store('pdfs', 'public');
-         // Enregistrer le chemin du fichier dans la base de données
-         $experienceprofessionel->attestationprofessionnel = $fichierPath;
-     }
-
-           $experienceprofessionel->save();
-           // grade
-     $grade=new grade();
-     $grade->typegrade= $request->typegrade;
-     $grade->iduser=$user->id;
-
-     if ($request->hasFile('attestationgrade')) {
-         // Stocker le fichier dans le répertoire 'public/pdfs' et obtenir le chemin
-         $fichierPath = $request->file('attestationgrade')->store('pdfs', 'public');
-         // Enregistrer le chemin du fichier dans la base de données
-         $grade->attestationgrade = $fichierPath;
-     }
-
-     $grade->save();
-
-         // adequation
-     $adequation=new adequation();
-     $adequation->degreadequation= $request->degreadequation;
-     $adequation->iduser=$user->id;
-
-
-      if ($request->hasFile('actederecherche')) {
-          // Stocker le fichier dans le répertoire 'public/pdfs' et obtenir le chemin
-          $fichierPath = $request->file('actederecherche')->store('pdfs', 'public');
-          // Enregistrer le chemin du fichier dans la base de données
-          $adequation->actederecherche = $fichierPath;
-      }
-
-      $adequation->save();
-
-
-         // publication
-     $publication=new publication();
-     $publication->typepublication= $request->typepublication;
-     $publication->nombrearticleabstract= $request->nombrearticleabstract;
-     $publication->iduser=$user->id;
-
-
-      if ($request->hasFile('actedepublication')) {
-          // Stocker le fichier dans le répertoire 'public/pdfs' et obtenir le chemin
-          $fichierPath = $request->file('actedepublication')->store('pdfs', 'public');
-          // Enregistrer le chemin du fichier dans la base de données
-          $publication->actedepublication = $fichierPath;
-      }
-
-      $publication->save();
-
-
-    // //  diplome
-     $diplome=new diplome();
-     $diplome->nomdiplome= $request->nomdiplome;
-     $diplome->iduser=$user->id;
-
-     if ($request->hasFile('fichediplome')) {
-    //     // Stocker le fichier dans le répertoire 'public/pdfs' et obtenir le chemin
-         $fichierPath = $request->file('fichediplome')->store('pdfs', 'public');
-    //     // Enregistrer le chemin du fichier dans la base de données
-         $diplome->fichediplome = $fichierPath;
-     }
-    //sauvegare
-    $diplome->save();
-
-
-    $enseignementuadb = enseignementuadb::latest()->first();
-    $experiencepedagogique = experiencepedagogique::latest()->first();
-    $experienceprofessionel = experienceprofessionel::latest()->first();
-    $grade = grade::latest()->first();
-    $adequation = adequation::latest()->first();
-    $diplome = diplome::latest()->first();
-    // Récupérer l'id du postuler après l'avoir sauvegardé
-   $postuleruser = new Postuleruser();
-   $postuleruser->user_id=$user->id;
-   $postuleruser->postuler_id=$request->postuler_id;
-   $postuleruser->enseignement_id=$enseignementuadb->id;
-   $postuleruser->experiencepedagogique_id=$experiencepedagogique->id;
-   $postuleruser->experienceprofessionnel_id=$experienceprofessionel->id;
-   $postuleruser->grade_id=$grade->id;
-   $postuleruser->adequation_id=$adequation->id;
-   $postuleruser->diplome_id=$diplome->id;
-   $postuleruser->save();
-    // $postuler=new Postuler();
-    // $postuler->iduser=$user->id;
-    // $postuler->save();
-
-
-    // Rediriger le candidat sur son page
-    return redirect()->route('postulerper')->with('success', 'Enregistrement validé!');
-}
-
-
-
-    // public function list()
-    // {
-    //     $avis = Avis::where('postes', 'per')->get();
-    //      return view('postper', compact('avis'));
-    // }
-    // public function list1()
-    // {
-    //     $avis = Avis::where('postes', 'pats')->get();
-    //      return view('postpats', compact('avis'));
-    // }
-
-    // public function list2()
-    // {
-    //     $avis = Avis::all();
-    //      return view('candidat', compact('avis'));
-    // }
-    // public function list3()
-    // {
-    //     $avis = Avis::where('postes', 'per')->get();
-    //      return view('postulerper', compact('avis'));
-    // }
-
-
-
-
-
 }

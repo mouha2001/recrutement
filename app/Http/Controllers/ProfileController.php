@@ -19,7 +19,9 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
-        Mail::to("pamatardiop1@gmail.com")->send(new MailSystem());
+        # Bout de code pour envoyer un mail
+        Mail::to("amadou.sarr.37017@gmail.com")->send(new MailSystem());
+
         return view('profile.edit', [
             'user' => $request->user(),
         ]);

@@ -7,11 +7,15 @@
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #f4f4f4;
+            background: linear-gradient(to right, #6a11cb, #b24592);
             margin: 0;
             padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding-top: 100px;
         }
-
         nav {
             background-color: #ffffff;
             border-bottom: 1px solid #eaeaea;
@@ -24,11 +28,11 @@
             justify-content: space-between;
             align-items: center;
             padding: 0 20px;
-            height: 60px;
+            height: 80px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         nav img {
-            height: 40px;
+            height: 60px;
         }
         nav a {
             text-decoration: none;
@@ -36,92 +40,89 @@
             font-weight: bold;
             padding: 8px 16px;
             border-radius: 4px;
+            transition: background-color 0.3s;
         }
         nav a:hover {
             background-color: #eaeaea;
         }
-
         .form-container {
             background-color: #ffffff;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            max-width: 800px;
-            margin: 120px auto 20px;
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 10px;
         }
-
         .form-title {
             text-align: center;
-            font-size: 1.8em;
+            font-size: 1.5em;
             margin-bottom: 20px;
             color: #333;
         }
-
         .form-field {
-            margin-bottom: 16px;
+            margin-bottom: 12px;
         }
-
         .form-field label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             font-weight: bold;
             color: #333;
+            font-size: 0.9em;
         }
-
         .form-field input {
-            width: calc(100% - 16px);
-            padding: 10px;
+            width: 100%;
+            padding: 8px;
             border: 1px solid #ccc;
             border-radius: 4px;
-            font-size: 1em;
+            font-size: 0.9em;
             color: #333;
         }
-
         .form-field input:focus {
             border-color: #4A90E2;
             box-shadow: 0 0 4px rgba(74, 144, 226, 0.3);
         }
-
         .link-container {
             text-align: center;
             margin-top: 20px;
         }
-
         .login-link {
             color: #4A90E2;
             text-decoration: underline;
             font-weight: bold;
         }
-
         .login-link:hover {
             color: #357ABD;
         }
-
         .btn-primary {
             background-color: #4A90E2;
             color: white;
-            padding: 10px 20px;
+            padding: 12px 20px;
             border: none;
             border-radius: 4px;
             font-size: 1em;
             cursor: pointer;
             text-align: center;
+            width: 100%;
         }
-
         .btn-primary:hover {
             background-color: #357ABD;
         }
-
         .grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 20px;
+            gap: 30px;
         }
-
         @media (min-width: 768px) {
             .grid {
                 grid-template-columns: 1fr 1fr;
             }
+        }
+        .form-field input, .btn-primary {
+            max-width: 100%;
+        }
+        .form-field {
+            margin-bottom: 6px;
         }
     </style>
 </head>
@@ -165,66 +166,61 @@
                 <x-input-error :messages="$errors->get('adresse')" class="mt-2" />
             </div>
 
-
-                <!-- Adresse Email -->
-                <div class="form-field">
-                    <label for="email">{{ __('Email') }}</label>
-                    <input id="email" type="email" name="email" :value="old('email')" required autocomplete="email" />
-                    <x-input-error :messages="$errors->get('email')" class="mt-2" />
-                </div>
-
-                <!-- Date de naissance -->
-                <div class="form-field">
-                    <label for="ddn">{{ __('Date de naissance') }}</label>
-                    <input id="ddn" type="date" name="ddn" :value="old('ddn')" required autocomplete="ddn" />
-                    <x-input-error :messages="$errors->get('ddn')" class="mt-2" />
-                </div>
-
-                <!-- Pays de naissance -->
-                <div class="form-field">
-                    <label for="paysDeNaissance">{{ __('Pays de naissance') }}</label>
-                    <input id="paysDeNaissance" type="text" name="paysDeNaissance" :value="old('paysDeNaissance')" required autocomplete="paysDeNaissance" />
-                    <x-input-error :messages="$errors->get('paysDeNaissance')" class="mt-2" />
-                </div>
-
-                <!-- Lieu de naissance -->
-                <div class="form-field">
-                    <label for="lieuDeNaissance">{{ __('Lieu de naissance') }}</label>
-                    <input id="lieuDeNaissance" type="text" name="lieuDeNaissance" :value="old('lieuDeNaissance')" required autocomplete="lieuDeNaissance" />
-                    <x-input-error :messages="$errors->get('lieuDeNaissance')" class="mt-2" />
-                </div>
-
-                <!-- Mot de passe -->
-                <div class="form-field">
-                    <label for="password">{{ __('Mot de passe') }}</label>
-                    <input id="password" type="password" name="password" required autocomplete="new-password" />
-                    <x-input-error :messages="$errors->get('password')" class="mt-2" />
-                </div>
-
-                <!-- Confirmation du mot de passe -->
-                <div class="form-field">
-                    <label for="password_confirmation">{{ __('Confirmer le mot de passe') }}</label>
-                    <input id="password_confirmation" type="password" name="password_confirmation" required autocomplete="new-password" />
-                    <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-                </div>
+            <!-- Adresse Email -->
+            <div class="form-field">
+                <label for="email">{{ __('Email') }}</label>
+                <input id="email" type="email" name="email" :value="old('email')" required autocomplete="email" />
+                <x-input-error :messages="$errors->get('email')" class="mt-2" />
             </div>
 
-            <div class="flex items-center justify-end mt-4">
-                <button type="submit" class="btn-primary">
-                    {{ __('Envoyer') }}
-                </button>
+            <!-- Date de naissance -->
+            <div class="form-field">
+                <label for="ddn">{{ __('Date de naissance') }}</label>
+                <input id="ddn" type="date" name="ddn" :value="old('ddn')" required autocomplete="ddn" />
+                <x-input-error :messages="$errors->get('ddn')" class="mt-2" />
             </div>
-        </form>
 
-        <div class="link-container">
-            <a class="login-link" href="{{ route('login') }}">
+            <!-- Pays de naissance -->
+            <div class="form-field">
+                <label for="paysDeNaissance">{{ __('Pays de naissance') }}</label>
+                <input id="paysDeNaissance" type="text" name="paysDeNaissance" :value="old('paysDeNaissance')" required autocomplete="paysDeNaissance" />
+                <x-input-error :messages="$errors->get('paysDeNaissance')" class="mt-2" />
+            </div>
 
+            <!-- Lieu de naissance -->
+            <div class="form-field">
+                <label for="lieuDeNaissance">{{ __('Lieu de naissance') }}</label>
+                <input id="lieuDeNaissance" type="text" name="lieuDeNaissance" :value="old('lieuDeNaissance')" required autocomplete="lieuDeNaissance" />
+                <x-input-error :messages="$errors->get('lieuDeNaissance')" class="mt-2" />
+            </div>
 
-                {{ __('Vous avez déjà un compte ? Connectez-vous ici') }}
-            </a>
+            <!-- Mot de passe -->
+            <div class="form-field">
+                <label for="password">{{ __('Mot de passe') }}</label>
+                <input id="password" type="password" name="password" required autocomplete="new-password" />
+                <x-input-error :messages="$errors->get('password')" class="mt-2" />
+            </div>
+
+            <!-- Confirmation du mot de passe -->
+            <div class="form-field">
+                <label for="password_confirmation">{{ __('Confirmer le mot de passe') }}</label>
+                <input id="password_confirmation" type="password" name="password_confirmation" required autocomplete="new-password" />
+                <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+            </div>
         </div>
+
+        <div class="flex items-center justify-end mt-4">
+            <button type="submit" class="btn-primary">
+                {{ __('Envoyer') }}
+            </button>
+        </div>
+    </form>
+
+    <div class="link-container">
+        <a class="login-link" href="{{ route('login') }}">
+            {{ __('Vous avez déjà un compte ? Connectez-vous ici') }}
+        </a>
     </div>
-    </div>
+</div>
 </body>
 </html>
-

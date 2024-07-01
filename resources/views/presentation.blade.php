@@ -44,12 +44,13 @@
             padding: 32px;
             margin: 24px;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            text-align: center;
+            text-align: justify;
         }
 
         .presentation-section h1 {
             color: #1F2937;
             font-weight: 700;
+            text-align: center;
         }
 
         .presentation-section p {

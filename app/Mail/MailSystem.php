@@ -37,7 +37,7 @@ class MailSystem extends Mailable
      */
     public function content(): Content
     {
-        return new Content(view: "mail.candidat");
+        return new Content(view: "recrutement.mail");
     }
 
     /**

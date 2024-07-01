@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
@@ -20,15 +19,10 @@ class DepartementController extends Controller
     {
         return view('ajoutdepartement');
     }
+
     public function store(Request $request): RedirectResponse
     {
-
-       // dd($request->all());
-
-
         $candidat = new User();
-
-
         $candidat->prenom = $request->prenom;
         $candidat->nom = $request->nom;
         $candidat->phone = $request->phone;
@@ -36,66 +30,59 @@ class DepartementController extends Controller
         $candidat->email = $request->email;
         $candidat->ddn = $request->ddn;
         $candidat->paysDeNaissance = $request->paysDeNaissance;
-        $candidat->lieuDeNaissance = $request ->lieuDeNaissance;
+        $candidat->lieuDeNaissance = $request->lieuDeNaissance;
         $candidat->profil = $request->profil;
         $candidat->departement = $request->departement;
         $candidat->ufr = $request->ufr;
-        $candidat->password = $request->password;
-
-
-        // Sauvegarder l'utilisateur
+        $candidat->password = Hash::make($request->password);
         $candidat->save();
 
-
-         // Connecter l'administrateur
-         Auth::login($request->user());
-         // Rediriger l'administrateur vers sa propre page
-         return redirect()->route('liste_comptes');
+        Auth::login($candidat);
+        return redirect()->route('liste_comptes');
     }
 
     public function list()
     {
-        $users = User::all();
+        $users = User::where('profil', '!=', 'candidat')->paginate(10); // Pagination
         return view('liste_comptes', compact('users'));
     }
 
-
-
     public function edit()
     {
-        $id=request('id');
+        $id = request('id');
         $user = User::findOrFail($id);
         return view('modifier', compact('user'));
     }
+
     public function update(Request $request)
     {
-
         $user = User::findOrFail($request->id);
-
-        // Mettre à jour les données du compte
         $user->prenom = $request->prenom;
-        // Ajoutez les autres champs à mettre à jour ici...
+        $user->nom = $request->nom;
+        $user->phone = $request->phone;
+        $user->adresse = $request->adresse;
+        $user->email = $request->email;
+        $user->ddn = $request->ddn;
+        $user->paysDeNaissance = $request->paysDeNaissance;
+        $user->lieuDeNaissance = $request->lieuDeNaissance;
+        $user->profil = $request->profil;
+        $user->departement = $request->departement;
+        $user->ufr = $request->ufr;
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
+        }
+        $user->save();
 
-        $user->update();
-
-        // Rediriger avec un message de succès ou vers une autre page
         return redirect()->route('liste_comptes')->with('success', 'Compte mis à jour avec succès');
     }
 
     public function destroy()
-{
-    // Trouver l'utilisateur à supprimer
-    $id=request('id');
-    $user = user::findOrFail($id);
-
-    // Supprimer l'utilisateur
-    $user->delete();
-
-    // Rediriger avec un message de confirmation
-    return redirect()->route('liste_comptes')->with('success', 'Utilisateur supprimé avec succès');
-}
-
-
+    {
+        $id = request('id');
+        $user = User::findOrFail($id);
+        $user->delete();
+        return redirect()->route('liste_comptes')->with('success', 'Utilisateur supprimé avec succès');
+    }
 
 
 }

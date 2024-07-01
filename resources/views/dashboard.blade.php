@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>dashboard</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -24,7 +24,7 @@
         });
     </script>
 </head>
-<body class="antialiased bg-gray-200 font-body">
+<body class="antialiased bg-white font-body">
   <nav class="bg-white-900 dark:bg-white-900 fixed w-full z-20 top-0 start-0 h-20 border-b border-white-900 dark:border-white-900 flex justify-between items-center px-4">
         <a class="flex items-center space-x-3 rtl:space-x-reverse ">
             <img src="#" alt="Logo UADB" width="300" height="auto">
@@ -48,8 +48,7 @@
             </li>
         </ul>
     </nav>
-
-
+    <br>
     <div class="fixed z-20 text-center top-1/2 left-1/2" id="chargement">
         <div role="status">
             <svg aria-hidden="true" class="inline w-12 h-12 text-gray-200 animate-spin fill-blue-600"

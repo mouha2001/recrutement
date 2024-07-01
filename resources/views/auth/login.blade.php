@@ -7,9 +7,13 @@
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #f4f4f4;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
             margin: 0;
             padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
         nav {
             background-color: #ffffff;
@@ -23,11 +27,11 @@
             justify-content: space-between;
             align-items: center;
             padding: 0 20px;
-            height: 60px;
+            height: 80px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         nav img {
-            height: 45px;
+            height: 50px;
         }
         nav a {
             text-decoration: none;
@@ -35,6 +39,7 @@
             font-weight: bold;
             padding: 8px 16px;
             border-radius: 4px;
+            transition: background-color 0.3s;
         }
         nav a:hover {
             background-color: #eaeaea;
@@ -43,39 +48,52 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin-top: 60px;
+            width: 100%;
+            max-width: 420px;
+            margin-top: 80px;
         }
         .login-form {
             background-color: #fff;
-            padding: 20px;
+            padding: 40px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            width: 420px;
+            width: 100%;
+            text-align: center;
         }
         .login-form h2 {
             margin-bottom: 20px;
-            text-align: center;
+            color: #333;
         }
         .login-form label {
             display: block;
             margin-bottom: 6px;
             font-weight: bold;
+            color: #555;
         }
         .login-form input[type="email"], .login-form input[type="password"] {
-            width: 90%;
+            width: 100%;
             padding: 10px;
             margin-bottom: 12px;
             border: 1px solid #ccc;
             border-radius: 4px;
+            font-size: 16px;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+            transition: border-color 0.3s;
+        }
+        .login-form input[type="email"]:focus, .login-form input[type="password"]:focus {
+            border-color: #007bff;
+            outline: none;
         }
         .login-form button {
-            padding: 9px;
+            width: 100%;
+            padding: 12px;
             background-color: #007bff;
             border: none;
             color: white;
             border-radius: 4px;
             font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s;
         }
         .login-form button:hover {
             background-color: #0056b3;
@@ -83,15 +101,28 @@
         .login-form .forgot-password {
             margin-top: 18px;
             text-align: right;
+            font-size: 14px;
+            color: #007bff;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .login-form .forgot-password:hover {
+            color: #0056b3;
         }
         .form-actions {
             display: flex;
             align-items: center;
-            justify-content: flex-end;
+            justify-content: flex-start;
             margin-top: 18px;
+            margin-bottom: 12px;
         }
-        .form-actions a {
-            margin-right: auto;
+        .form-actions .remember-me {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+        }
+        .form-actions .remember-me input {
+            margin-right: 8px;
         }
     </style>
 </head>
@@ -127,24 +158,21 @@
             </div>
 
             <!-- Remember Me -->
-            <div>
-                <label for="remember_me">
-                    <input id="remember_me" type="checkbox" name="remember">
-                    <span>{{ __('Remember me') }}</span>
-                </label>
-            </div>
-
             <div class="form-actions">
-                @if (Route::has('password.request'))
-                    <a class="forgot-password" href="{{ route('password.request') }}">
-                        {{ __('Mot de passe oublié?') }}
-                    </a>
-                @endif
-
-                <button type="submit">
-                    {{ __('Connecter') }}
-                </button>
+                <div class="remember-me">
+                    <input id="remember_me" type="checkbox" name="remember">
+                    <label for="remember_me">{{ __('Remember me') }}</label>
+                </div>
             </div>
+
+            <button type="submit" class="login-button">
+                {{ __('Connecter') }}
+            </button>
+            @if (Route::has('password.request'))
+                <a class="forgot-password" href="{{ route('password.request') }}">
+                    {{ __('Mot de passe oublié?') }}
+                </a>
+            @endif
         </form>
     </div>
 </div>
